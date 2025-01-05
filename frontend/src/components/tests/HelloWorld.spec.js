@@ -4,7 +4,7 @@ import HelloWorld from '../HelloWorld.vue'
 
 describe('HelloWorld.vue', () => {
   it('renders the message passed as a prop', () => {
-    const msg = 'Hello, Vue!'
+    const msg = 'Hello2, Vue!'
     const wrapper = mount(HelloWorld, {
       props: { msg }
     })
