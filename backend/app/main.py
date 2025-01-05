@@ -9,16 +9,6 @@ class Item(BaseModel):
     name: str
     description: str
 
-@app.on_event("startup")
-async def startup():
-    # Connect to database
-    await database.connect()
-
-@app.on_event("shutdown")
-async def shutdown():
-    # Disconnect from database
-    await database.disconnect()
-
 @app.get("/")
 async def read_root():
     return {"message": "Hello, World!"}
@@ -30,3 +20,8 @@ async def create_item(item: Item, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+    
