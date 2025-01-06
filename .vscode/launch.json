@@ -1,5 +1,7 @@
 {
     "configurations": [
+    
+        
         {
             "name": "Docker: Python - Fastapi",
             "type": "docker",
@@ -14,6 +16,14 @@
                 ],
                 "projectType": "fastapi"
             }
-        }
+        },
+        {
+            "name": "Run Compose",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "run-compose",
+            "url": "http://localhost:8080"
+        },
+        
     ]
 }
