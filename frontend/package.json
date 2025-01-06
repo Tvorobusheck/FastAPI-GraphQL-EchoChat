@@ -9,6 +9,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
     "core-js": "^3.8.3",
     "vue": "^3.2.13"
   },
