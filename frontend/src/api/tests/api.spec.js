@@ -26,4 +26,26 @@ describe('api.js', () => {
     expect(helloMsg).toBe("Hello from GQL server!")
   })
   
+  it('test apollo items query', async () => {
+    const app = createApp({
+      render: () => h(App),
+    })
+    expect(api.apolloProvider).toBeTruthy()
+    expect(app.use(api.apolloProvider)).toBeTruthy()
+    const items = await api.fetchItems()
+    expect(items).toBeTruthy()
+  })
+
+  it('test apollo add item', async () => {
+    const app = createApp({
+      render: () => h(App),
+    })
+    expect(api.apolloProvider).toBeTruthy()
+    expect(app.use(api.apolloProvider)).toBeTruthy()
+    const newName = "New Name"
+    const newDescription = "New Description"
+    const item = await api.addItem(newName, newDescription)
+    expect(item.name).toBe(newName)
+    expect(item.description).toBe(newDescription)
+  })
 })

@@ -1,26 +1,27 @@
-import databases
-import sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
+from typing import AsyncGenerator
 
-# Load environment variables from .env file
-load_dotenv()
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker, declarative_base, DeclarativeMeta
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+from config import DB_DRIVER, DB, DB_HOST, DB_USER, DB_PASSWORD
 
-# Set up database connection and ORM
-database = databases.Database(DATABASE_URL)
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base: DeclarativeMeta = declarative_base()
 
-Base = declarative_base()
+DATABASE_URL = f"{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB}"
+print(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL)
+async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
+async def create_db_and_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_maker() as session:
+        yield session
+
+
+def get_base():
+    return Base

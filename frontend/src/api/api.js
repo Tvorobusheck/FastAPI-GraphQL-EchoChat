@@ -35,10 +35,42 @@ async function fetchHelloWorld() {
   return response.data.helloWorld
 }
 
+// Method to fetch items
+async function fetchItems() {
+  const response = await apolloClient.query({
+    query: gql`
+      query {
+        items {
+          name
+        }
+      }
+    `,
+  })
+  return response.data.items
+}
+
+
+// Method to add item
+async function addItem(name, description) {
+  const response = await apolloClient.mutate({
+    mutation: gql`
+      mutation {
+        addItem(name: "${name}", description: "${description}") {
+            name
+            description
+        }
+      }
+    `,
+  })
+  return response.data.addItem
+}
+
 let exports = {
   apolloClient: apolloClient,
   apolloProvider: apolloProvider,
   fetchHelloWorld: fetchHelloWorld,
+  fetchItems: fetchItems,
+  addItem: addItem
 }
 
 export default exports
