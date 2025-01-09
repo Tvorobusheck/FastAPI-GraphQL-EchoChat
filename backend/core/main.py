@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from db import get_async_session, Base, engine
 from sqlalchemy.ext.asyncio import AsyncSession
 import strawberry
 from strawberry.fastapi import GraphQLRouter
-from typing import List
+from typing import Annotated, List
+from config import RELOAD
 
 app = FastAPI()
 
@@ -35,12 +36,16 @@ class Query:
 
     @strawberry.field
     async def items(self, info) -> List[ItemType]:
-        return [ItemType(name=item.name, description=item.description) for item in all_items]
+        db: AsyncSession = await anext(get_async_session())
+        query = select(Item)
+        res = list((await db.execute(query)).scalars().all())
+        return res
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
     async def add_item(self, name: str, description: str) -> ItemType:
+        db: AsyncSession = await anext(get_async_session())
         new_item = ItemType(name=name, description=description)
         all_items.append(new_item)
         return new_item

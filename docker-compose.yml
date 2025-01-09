@@ -4,17 +4,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    #volumes:
-    #  - ./backend:/app
+    volumes:
+      - ./backend/migrations/versions/:/app/migrations/versions/
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://username:password@db:5432/mydatabase
     depends_on:
       - db
     networks:
       - app-network
-
   frontend:
     build:
       context: ./frontend

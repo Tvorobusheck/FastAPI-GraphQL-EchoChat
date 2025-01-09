@@ -8,7 +8,6 @@ from config import DB_DRIVER, DB, DB_HOST, DB_USER, DB_PASSWORD
 Base: DeclarativeMeta = declarative_base()
 
 DATABASE_URL = f"{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB}"
-print(DATABASE_URL)
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
