@@ -1,25 +1,16 @@
 from fastapi import FastAPI, Depends
-from pydantic import BaseModel
 from sqlalchemy import Integer, String, select
-from sqlalchemy.orm import relationship, Mapped, mapped_column
-from db import get_async_session, Base, engine
 from sqlalchemy.ext.asyncio import AsyncSession
 import strawberry
 from strawberry.fastapi import GraphQLRouter
 from typing import Annotated, List
 from config import RELOAD
 
+from db import get_async_session
+from models import Item
+from schemas import ItemCreate
+
 app = FastAPI()
-
-class Item(Base):
-    __tablename__ = "items"
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column()
-    description: Mapped[str] = mapped_column()
-
-class ItemCreate(BaseModel):
-    name: str
-    description: str
 
 @strawberry.type
 class ItemType:

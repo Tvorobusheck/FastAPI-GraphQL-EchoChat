@@ -23,6 +23,12 @@ def test_hello_world_query():
     assert response.status_code == 200
     assert response.json() == {"data": {"helloWorld": "Hello from GQL server!"}}
 
+def test_db_env():
+    from config import DB_HOST, DB
+    assert type(DB_HOST) is str and len(DB_HOST) > 0
+    assert type(DB) is str and len(DB) > 0
+
+
 def test_items_query():
     query = """
     query {

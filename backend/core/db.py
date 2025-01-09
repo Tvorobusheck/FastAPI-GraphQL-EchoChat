@@ -23,4 +23,5 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 def get_base():
+    import models
     return Base
